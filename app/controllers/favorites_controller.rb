@@ -7,6 +7,7 @@
 # Visit https://pragprog.com/titles/nrclient2 for more book information.
 #---
 class FavoritesController < ApplicationController
+  def index; end
   def create
     Favorite.create(user: current_user, concert_id: params[:concert_id])
     redirect_to(:root)
