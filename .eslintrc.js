@@ -5,7 +5,7 @@
  * courses, books, articles, and the like. Contact us if you are in doubt.
  * We make no guarantees that this code is fit for any purpose.
  * Visit https://pragprog.com/titles/nrclient2 for more book information.
-***/
+ ***/
 module.exports = {
   env: {
     browser: true,
@@ -16,7 +16,7 @@ module.exports = {
     "plugin:prettier/recommended",
     "plugin:cypress/recommended",
   ],
-  parser: "@babel/eslint-parser",
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 12,
     parser: "@babel/eslint-parser",
