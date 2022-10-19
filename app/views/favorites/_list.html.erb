@@ -4,19 +4,20 @@
     <button
       class="<%= SimpleForm.button_class %>py-1 text-xl font-semibold"
       data-action="click->favorite-toggle#toggle"
-      data-favorite-toggle-text-param="Hello from ERB file"
     >
       Hide
     </button>
-    <div class="text-xl font-bold" id="no-favorites">
-      <% if current_user.favorites.empty? %>
-        No favorite concerts yet
-      <% end %>
-    </div>
-    <div id="favorite-concerts-list">
-      <% current_user.favorites.each do |favorite| %>
-        <%= render(favorite) %>
-      <% end %>
+    <div data-favorite-toggle-target="elementToHide">
+      <div class="text-xl font-bold" id="no-favorites">
+        <% if current_user.favorites.empty? %>
+          No favorite concerts yet
+        <% end %>
+      </div>
+      <div id="favorite-concerts-list">
+        <% current_user.favorites.each do |favorite| %>
+          <%= render(favorite) %>
+        <% end %>
+      </div>
     </div>
   </section>
 <% end %>
