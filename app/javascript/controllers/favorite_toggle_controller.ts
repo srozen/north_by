@@ -2,6 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="favorite-toggle"
 export default class FavoriteToggleController extends Controller {
+  static classes = ["hidden"]
+  hiddenClass: string
+
   static targets = ["elementToHide", "hideButton"]
   elementToHideTarget: HTMLElement
   hideButtonTarget: HTMLElement
@@ -19,7 +22,10 @@ export default class FavoriteToggleController extends Controller {
   }
 
   updateHiddenClass(): void {
-    this.elementToHideTarget.classList.toggle("hidden", !this.visibleValue)
+    this.elementToHideTarget.classList.toggle(
+      this.hiddenClass,
+      !this.visibleValue
+    )
   }
 
   visibleText(): string {
