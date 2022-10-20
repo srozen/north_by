@@ -13,13 +13,15 @@ module.exports = {
   },
   extends: [
     "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
     "plugin:cypress/recommended",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 12,
-    parser: "@babel/eslint-parser",
+    parser: "@typescript/eslint-parser",
     requireConfigFile: false,
     sourceType: "module",
   },
