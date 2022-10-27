@@ -2,22 +2,27 @@ import * as React from "react"
 
 interface SeatProps {
   seatNumber: number
-  initialStatus: string
+  status: string
+  clickHandler: (seatNumber: number) => void
 }
 
-const Seat = (props: SeatProps): React.ReactElement => {
-  const [status, setStatus] = React.useState(props.initialStatus)
-
-  function isHeld(): boolean {
-    return status === "held"
+export const Seat = ({
+  seatNumber,
+  status,
+  clickHandler,
+}: SeatProps): React.ReactElement => {
+  function stateDisplayClass(): string {
+    if (status === "unsold") {
+      return "bg-white hover:bg-blue-300"
+    } else if (status === "held") {
+      return "bg-green-500"
+    } else {
+      return "bg-red-500"
+    }
   }
 
   function changeState(): void {
-    isHeld() ? setStatus("unsold") : setStatus("held")
-  }
-
-  function stateDisplayClass(): string {
-    return isHeld() ? "bg-green-500" : "bg-white hover:bg-blue-300"
+    clickHandler(seatNumber)
   }
 
   const cssClass = "p-4 m-2 border-black border-4 text-lg"
@@ -27,7 +32,7 @@ const Seat = (props: SeatProps): React.ReactElement => {
       <span
         className={`${cssClass} ${stateDisplayClass()}`}
         onClick={changeState}>
-        {props.seatNumber + 1}
+        {seatNumber + 1}
       </span>
     </td>
   )

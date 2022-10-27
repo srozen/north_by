@@ -1,4 +1,6 @@
 import * as React from "react"
+import VenueBody from "./venue_body"
+import VenueHeader from "./venue_header"
 import Row from "./row"
 
 interface VenueProps {
@@ -7,21 +9,20 @@ interface VenueProps {
 }
 
 const Venue = (props: VenueProps): React.ReactElement => {
-  const rowNumbers = Array.from(Array(props.seatsPerRow).keys())
-  const rowItems = rowNumbers.map((rowNumber) => {
-    return (
-      <Row
-        rowNumber={rowNumber}
-        seatsPerRow={props.seatsPerRow}
-        key={rowNumber}
-      />
-    )
-  })
+  const [ticketsToBuyCount, setTicketsToBuyCount] = React.useState(1)
 
   return (
-    <table className="table">
-      <tbody>{rowItems}</tbody>
-    </table>
+    <>
+      <VenueHeader
+        seatsPerRow={props.seatsPerRow}
+        setTicketsToBuyCount={setTicketsToBuyCount}
+      />
+      <VenueBody
+        seatsPerRow={props.seatsPerRow}
+        rows={props.rows}
+        ticketsToBuyCount={ticketsToBuyCount}
+      />
+    </>
   )
 }
 
