@@ -76,4 +76,12 @@ class Concert < ApplicationRecord
       tickets.unsold.sample.update(status: :purchased, user: User.hoarder)
     end
   end
+
+  def self.search(query)
+    joins(:bands)
+      .where("concerts.name ILIKE ?", "%#{query}%")
+      .or(Concert.where("concerts.genre_tags ILIKE ?", "%#{query}%"))
+      .or(Concert.joins(:bands).where("bands.name ILIKE ?", "%#{query}%"))
+      .uniq
+  end
 end

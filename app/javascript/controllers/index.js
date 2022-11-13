@@ -10,5 +10,8 @@ application.register("css", CssController)
 import CssFlipController from "./css_flip_controller.ts"
 application.register("css-flip", CssFlipController)
 
+import SearchController from "./search_controller.ts"
+application.register("search", SearchController)
+
 import TextController from "./text_controller.ts"
 application.register("text", TextController)
