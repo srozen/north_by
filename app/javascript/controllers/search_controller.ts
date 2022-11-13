@@ -31,10 +31,8 @@ export default class SearchController extends Controller {
 
   debounce(functionToDebounce: Function, wait = 300) {
     let timeoutId = null
-    console.log('init')
 
     return (...args: any[]) => {
-      console.log('ruun')
       clearTimeout(timeoutId)
       timeoutId = setTimeout(() => {
         timeoutId = null

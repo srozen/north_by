@@ -58,7 +58,7 @@ class Concert < ApplicationRecord
   end
 
   def sell_out!
-    tickets.update_all(status: :purchased, user: User.hoarder)
+    tickets.update_all(status: :purchased, user_id: User.hoarder.id)
   end
 
   def find_ticket_at(row:, number:)
