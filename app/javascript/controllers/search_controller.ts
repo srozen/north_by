@@ -7,8 +7,12 @@ export default class SearchController extends Controller {
   inputTarget: HTMLInputElement
   formTarget: HTMLFormElement
 
-  submit(): void {
-    this.formTarget.requestSubmit()
+  basicSubmit(): void {
+    if (this.inputTarget.value === "") {
+      this.reset()
+    } else {
+      this.formTarget.requestSubmit()
+    }
   }
 
   resetOnOutsideClick(event: Event): void {
@@ -21,5 +25,21 @@ export default class SearchController extends Controller {
     this.resultsTarget.classList.add("hidden")
     this.resultsTarget.innerText = ""
     this.inputTarget.value = ""
+  }
+
+  submit = this.debounce(this.basicSubmit.bind(this))
+
+  debounce(functionToDebounce: Function, wait = 300) {
+    let timeoutId = null
+    console.log('init')
+
+    return (...args: any[]) => {
+      console.log('ruun')
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        timeoutId = null
+        functionToDebounce(...args)
+      }, wait)
+    }
   }
 }
