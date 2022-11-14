@@ -1,0 +1,10 @@
+<%= turbo_stream.remove(dom_id(favorite)) %>
+<%= turbo_stream.replace(dom_id(favorite.concert)) do %>
+  <%= render(favorite.concert, user: user) %>
+<% end %>
+<% if user.favorites.empty? %>
+  <%= turbo_stream.update("no-favorites") do %>
+    No favorites concert yet.
+  <% end %>
+<% end %>
+<%= turbo_stream.update("favorites-count", plain: user.favorites.count) %>

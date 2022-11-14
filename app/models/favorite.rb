@@ -19,4 +19,28 @@
 class Favorite < ApplicationRecord
   belongs_to :user
   belongs_to :concert
+
+  after_create_commit -> do
+    # Evaluated through instance_eval
+    # broadcast_append_later_to(user, :favorites, target: "favorite-concerts")
+    Turbo::StreamsChannel.broadcast_stream_to(
+      user, :favorites,
+      content: ApplicationController.render(
+        :turbo_stream,
+        partial: "favorites/create",
+        locals: {favorite: self, user: user}
+      )
+    )
+  end
+
+  after_destroy_commit -> do
+    Turbo::StreamsChannel.broadcast_stream_to(
+      user, :favorites,
+      content: ApplicationController.render(
+        :turbo_stream,
+        partial: "favorites/destroy",
+        locals: {favorite: self, user: user}
+      )
+    )
+  end
 end

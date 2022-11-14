@@ -19,7 +19,7 @@
   <% if show %>
     <section class="js--day-text" data-css-target="elementToChange">
       <% schedule_day.concerts.sort_by(&:start_time).each do |concert| %>
-        <%= render(concert) %>
+        <%= render(concert, user: current_user) %>
       <% end %>
     </section>
   <% end %>
