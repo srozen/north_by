@@ -1,26 +1,54 @@
 import * as React from "react"
 import VenueBody from "./venue_body"
 import VenueHeader from "./venue_header"
-import Row from "./row"
 
 interface VenueProps {
-  rows: number
+  rowCount: number
   seatsPerRow: number
+  concertId: number
 }
 
-const Venue = (props: VenueProps): React.ReactElement => {
-  const [ticketsToBuyCount, setTicketsToBuyCount] = React.useState(1)
+export interface TicketData {
+  id: number
+  row: number
+  number: number
+  status: string
+}
 
-  return (
+export type RowData = TicketData[]
+export type VenueData = RowData[]
+
+const Venue = ({
+  concertId,
+  rowCount,
+  seatsPerRow,
+}: VenueProps): React.ReactElement => {
+  const [ticketsToBuyCount, setTicketsToBuyCount] = React.useState(1)
+  const [venueData, setVenueData] = React.useState<VenueData>()
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`/tickets.json?concert_id=${concertId}`)
+      const json = await response.json()
+      console.log(json)
+      setVenueData(json)
+    }
+    fetchData()
+    const interval = setInterval(() => fetchData(), 1000 * 60)
+    return () => clearInterval(interval)
+  }, [])
+  return !venueData ? null : (
     <>
       <VenueHeader
-        seatsPerRow={props.seatsPerRow}
+        seatsPerRow={seatsPerRow}
         setTicketsToBuyCount={setTicketsToBuyCount}
       />
       <VenueBody
-        seatsPerRow={props.seatsPerRow}
-        rows={props.rows}
+        concertId={concertId}
+        seatsPerRow={seatsPerRow}
+        rowCount={rowCount}
         ticketsToBuyCount={ticketsToBuyCount}
+        venueData={venueData}
       />
     </>
   )

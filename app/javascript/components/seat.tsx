@@ -6,8 +6,10 @@ const stateColor = (status: string): string => {
     return "white"
   } else if (status === "held") {
     return "green"
-  } else {
+  } else if (status === "purchased") {
     return "red"
+  } else {
+    return "yellow"
   }
 }
 
