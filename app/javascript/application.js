@@ -10,6 +10,7 @@ import "@hotwired/turbo-rails"
 import "./controllers"
 import "./components/venue_display"
 import "animate.css"
+import "./channels"
 
 document.addEventListener("turbo:before-stream-render", (event) => {
   console.log(event.target.action)

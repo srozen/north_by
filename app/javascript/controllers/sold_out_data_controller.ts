@@ -1,25 +1,35 @@
 import { Controller } from "@hotwired/stimulus"
+import { createConsumer, Subscription } from "@rails/actioncable"
 
 // Connects to data-controller="sold-out-data"
 export default class SoldOutDataController extends Controller {
   static targets = ["concert"]
   concertTargets: Array<HTMLElement>
+  subscription: Subscription
+  started: boolean
 
   connect(): void {
-    setInterval(() => this.updateData(), 1000 * 60)
+    if (this.subscription) {
+      return
+    } else {
+      this.started = true
+      this.subscription = this.createSubscription(this)
+    }
   }
 
-  async updateData(): Promise<void> {
-    const response = await fetch("/sold_out_concerts")
-    const jsonString = await response.text()
-    const jsonObject = JSON.parse(jsonString)
-    const soldOutConcertIds = jsonObject["sold_out_concert_ids"].map((id) =>
-      id.toString()
-    )
+  createSubscription(source: SoldOutDataController): Subscription {
+    return createConsumer().subscriptions.create("ScheduleChannel", {
+      received({ sold_out_concert_ids }) {
+        source.updateData(sold_out_concert_ids)
+      },
+    })
+  }
 
+  updateData(soldOutConcertIds: number[]): void {
     this.concertTargets.forEach((concertElement: HTMLElement) => {
-      concertElement.dataset.concertSoldOutValue =
-        soldOutConcertIds.includes(concertElement.dataset.concertIdValue)
+      concertElement.dataset.concertSoldOutValue = soldOutConcertIds
+        .includes(parseInt(concertElement.dataset.concertIdValue, 10))
+        .toString()
     })
   }
 }
