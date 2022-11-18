@@ -2,6 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 import { createConsumer, Subscription } from "@rails/actioncable"
 
 // Connects to data-controller="sold-out-data"
+interface ConcertRemainingData {
+  concertId: number
+  ticketsRemaining: number
+}
+
 export default class SoldOutDataController extends Controller {
   static targets = ["concert"]
   concertTargets: Array<HTMLElement>
@@ -19,17 +24,23 @@ export default class SoldOutDataController extends Controller {
 
   createSubscription(source: SoldOutDataController): Subscription {
     return createConsumer().subscriptions.create("ScheduleChannel", {
-      received({ sold_out_concert_ids }) {
-        source.updateData(sold_out_concert_ids)
+      received({ concerts }) {
+        source.updateData(concerts)
       },
     })
   }
 
-  updateData(soldOutConcertIds: number[]): void {
-    this.concertTargets.forEach((concertElement: HTMLElement) => {
-      concertElement.dataset.concertSoldOutValue = soldOutConcertIds
-        .includes(parseInt(concertElement.dataset.concertIdValue, 10))
-        .toString()
+  updateData(concerts: ConcertRemainingData[]): void {
+    concerts.forEach(({concertId, ticketsRemaining}) => {
+      this.concertTargets.forEach((e) => {
+        if (e.dataset.concertIdValue === concertId.toString()) {
+          e.dataset.concertTicketsRemainingValue =
+            ticketsRemaining.toString()
+          e.dataset.concertSoldOutValue = (
+            ticketsRemaining === 0
+          ).toString()
+        }
+      })
     })
   }
 }

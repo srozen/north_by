@@ -1,11 +1,13 @@
 import * as React from "react"
 import Row from "./row"
 import { VenueData } from "./venue"
+import { Subscription } from "@rails/actioncable"
 
 interface VenueBodyProps {
   concertId: number
   rowCount: number
   seatsPerRow: number
+  subscription: Subscription
   ticketsToBuyCount: number
   venueData: VenueData
 }
@@ -14,6 +16,7 @@ const rowItems = ({
   concertId,
   rowCount,
   seatsPerRow,
+  subscription,
   ticketsToBuyCount,
   venueData,
 }) => {
@@ -23,6 +26,7 @@ const rowItems = ({
       concertId={concertId}
       key={rowNumber}
       rowData={venueData[rowNumber]}
+      subscription={subscription}
       rowNumber={rowNumber}
       seatsPerRow={seatsPerRow}
       ticketsToBuyCount={ticketsToBuyCount}

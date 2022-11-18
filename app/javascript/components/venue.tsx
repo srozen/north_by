@@ -1,6 +1,7 @@
 import * as React from "react"
 import VenueBody from "./venue_body"
 import VenueHeader from "./venue_header"
+import { createConsumer, Subscription } from "@rails/actioncable";
 
 interface VenueProps {
   rowCount: number
@@ -18,6 +19,8 @@ export interface TicketData {
 export type RowData = TicketData[]
 export type VenueData = RowData[]
 
+let subscription: Subscription
+
 const Venue = ({
   concertId,
   rowCount,
@@ -30,13 +33,21 @@ const Venue = ({
     const fetchData = async () => {
       const response = await fetch(`/tickets.json?concert_id=${concertId}`)
       const json = await response.json()
-      console.log(json)
       setVenueData(json)
     }
     fetchData()
-    const interval = setInterval(() => fetchData(), 1000 * 60)
-    return () => clearInterval(interval)
   }, [])
+
+  if (subscription === undefined) {
+    subscription = createConsumer().subscriptions.create(
+      {channel: "ConcertChannel", concertId: concertId},
+      {
+        received(data) {
+          setVenueData(data)
+        },
+      }
+    )
+  }
   return !venueData ? null : (
     <>
       <VenueHeader
@@ -47,6 +58,7 @@ const Venue = ({
         concertId={concertId}
         seatsPerRow={seatsPerRow}
         rowCount={rowCount}
+        subscription={subscription}
         ticketsToBuyCount={ticketsToBuyCount}
         venueData={venueData}
       />
