@@ -43,4 +43,8 @@ class Favorite < ApplicationRecord
       )
     )
   end
+
+  def sort_date
+    concert.start_time.to_i
+  end
 end

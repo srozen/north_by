@@ -27,9 +27,9 @@
           No favorite concerts yet
         <% end %>
       </div>
-      <div id="favorite-concerts-list">
-        <% current_user.favorites.each do |favorite| %>
-          <%= render(favorite) %>
+      <div id="favorite-concerts-list" data-controller="sort">
+        <% current_user.favorites.sort_by(&:sort_date).each do |favorite| %>
+          <%= render(favorite, animate_in: false) %>
         <% end %>
       </div>
     </div>

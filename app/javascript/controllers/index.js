@@ -22,5 +22,8 @@ application.register("search", SearchController)
 import SoldOutDataController from "./sold_out_data_controller.ts"
 application.register("sold-out-data", SoldOutDataController)
 
+import SortController from "./sort_controller.ts"
+application.register("sort", SortController)
+
 import TextController from "./text_controller.ts"
 application.register("text", TextController)
