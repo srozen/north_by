@@ -31,7 +31,7 @@ export default class SoldOutDataController extends Controller {
   }
 
   updateData(concerts: ConcertRemainingData[]): void {
-    concerts.forEach(({concertId, ticketsRemaining}) => {
+    concerts.forEach(({ concertId, ticketsRemaining }) => {
       this.concertTargets.forEach((e) => {
         if (e.dataset.concertIdValue === concertId.toString()) {
           e.dataset.concertTicketsRemainingValue =
