@@ -57,6 +57,14 @@ class Ticket < ApplicationRecord
           .reject(&:refunded?)
   end
 
+  def self.data_for_concert(concert_id)
+    for_concert(concert_id).map(&:to_concert_h)
+  end
+
+  def unavailable?
+    held? || purchased?
+  end
+
   def self.grouped_for_concert(concert_id)
     return [] unless concert_id
     for_concert(concert_id).map(&:to_concert_h).group_by { |t| t[:row] }.values

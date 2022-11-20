@@ -28,4 +28,14 @@ class ConcertChannel < ApplicationCable::Channel
       ]
     })
   end
+
+  def removed_from_cart(data)
+    cart = ShoppingCart.find_or_create_by(user_id: data["userId"])
+    cart.clear(
+      concert_id: data["concertId"],
+      tickets: data["tickets"]
+    )
+    result = Ticket.data_for_concert(data["concertId"])
+    ActionCable.server.broadcast("concert_#{data["concertId"]}", result)
+  end
 end

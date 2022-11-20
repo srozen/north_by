@@ -11,21 +11,10 @@ class TicketsController < ApplicationController
 
   # GET /tickets or /tickets.json
   def index
-    @tickets = if params[:concert_id]
-      Ticket.where(concert_id: params[:concert_id])
-        .order(row: :asc, number: :asc)
-        .all
-        .reject(&:refunded?)
-    else
-      Ticket.all
-    end
+    @tickets = Ticket.data_for_concert(params[:concert_id])
     respond_to do |format|
       format.html
-      format.json do
-        render(
-          json: @tickets.map(&:to_concert_h).group_by { |t| t[:row] }.values
-        )
-      end
+      format.json { render(json: @tickets) }
     end
   end
 
